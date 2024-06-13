@@ -11,6 +11,13 @@
     <properties>
         <maven.compiler.source>13</maven.compiler.source>
         <maven.compiler.target>13</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-web-version>6.1.5</spring-web-version>
+        <jackson-version>2.15.2</jackson-version>
+        <jackson-databind-version>2.15.2</jackson-databind-version>
+        <jakarta-annotation-version>2.1.1</jakarta-annotation-version>
+        <junit-version>5.10.2</junit-version>
+        <junit-platform-runner.version>1.10.0</junit-platform-runner.version>
     </properties>
 
     <dependencies>
@@ -25,9 +32,24 @@
             <version>4.5.13</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring-web-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-web-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>6.1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>6.1.5</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -45,10 +67,118 @@
             <version>2.13.0</version>
         </dependency>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
+            <artifactId>jackson-jakarta-rs-json-provider</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>${jakarta-annotation-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations-jakarta</artifactId>
+            <version>2.2.22</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-jackson -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
+            <version>13.2.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.5.0</version>
+                <executions>
+                    <execution>
+                        <id>commons</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/swagger.json</inputSpec>
+                            <generatorName>java</generatorName>
+                            <instantiationTypes>map=java.util.LinkedHashMap</instantiationTypes>
+                            <configOptions>
+                                <modelPackage>com.phpembeddedsystems.jira.model</modelPackage>
+                                <apiPackage>com.phpembeddedsystems.jira.api</apiPackage>
+                                <additionalModelTypeAnnotations>@lombok.Data
+                                </additionalModelTypeAnnotations>
+                                <useJakartaEe>true</useJakartaEe>
+                                <interfaceOnly>true</interfaceOnly>
+                                <openApiNullable>false</openApiNullable>
+                                <serializationLibrary>jackson</serializationLibrary>
+                                <generatedConstructorWithRequiredArgs>false</generatedConstructorWithRequiredArgs>
+                            </configOptions>
+                            <modelNameSuffix>Dto</modelNameSuffix>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <skipValidateSpec>false</skipValidateSpec>
+                            <typeMappings>
+                                <typeMapping>Double=java.math.BigDecimal</typeMapping>
+                            </typeMappings>
+                            <reservedWordsMappings>list=list</reservedWordsMappings>
+                            <library>resttemplate</library>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>15</source>
+                    <target>15</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

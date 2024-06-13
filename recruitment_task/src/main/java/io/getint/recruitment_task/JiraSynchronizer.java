@@ -1,6 +1,9 @@
 package io.getint.recruitment_task;
 
-import java.io.IOException;
+import com.phpembeddedsystems.jira.model.IssueBeanDto;
+import io.getint.recruitment_task.jiraapi.JiraApiFacade;
+
+import java.util.List;
 
 public class JiraSynchronizer {
     /**
@@ -13,5 +16,10 @@ public class JiraSynchronizer {
      * Bonus points for syncing comments.
      */
     public void moveTasksToOtherProject() throws Exception {
+        JiraApiFacade jiraApiFacade = new JiraApiFacade();
+        String projectSourceId = "KAN";
+        String projectDestinationId = "WSPAR";
+        List<IssueBeanDto> issuesList = jiraApiFacade.fetchIssues(projectSourceId);
+        jiraApiFacade.addIssues(projectDestinationId, issuesList);
     }
 }
